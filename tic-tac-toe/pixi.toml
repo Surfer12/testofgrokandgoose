@@ -1,0 +1,17 @@
+[project]
+authors = ["Ryan Oates <ryanfullstack@icloud.com>"]
+channels = ["https://conda.modular.com/max-nightly", "https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
+name = "tic-tac-toe"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+description = "A simple Tic Tac Toe game"
+
+[tasks]
+
+[dependencies]
+# Add any dependencies here, for example:
+# java-sdk-from-llm-provider = "1.0.0"
+
+[build-system]
+requires = ["mojo"]
+build-backend = "mojo.build"

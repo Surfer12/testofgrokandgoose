@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    
+    // Mockito for mocking
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    
+    // Lombok for reducing boilerplate
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    // Enable parallel execution for tests and additional JVM properties
+    systemProperty "junit.jupiter.execution.parallel.enabled", "true"
+}
+
+application {
+    mainClass = 'com.example.tictactoe.TicTacToe'
+}
