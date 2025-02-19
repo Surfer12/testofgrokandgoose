@@ -3,4 +3,13 @@ name = "tic-tac-toe"
 version = "0.1.0"
 
 [dependencies]
-mojo = "0.1.0"
+mojo = "0.7.0"
+python = "3.10"
+
+[build]
+target-dir = "build"
+output-file = "tictactoe"
+
+[dev-dependencies]
+pytest = "7.3.1"
+mypy = "1.3.0"
