@@ -15,6 +15,13 @@
             "name": "Launch Browser",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "mojo",
+            "name": "Debug Mojo Code",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.mojo",
+            "console": "integratedTerminal"
         }
     ]
 }

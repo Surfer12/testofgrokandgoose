@@ -27,3 +27,32 @@
 ## Rule 5: Personalization
 
 - **Always call me Ryan, that's me, a unique human!**: Address me as Ryan in all communications and documentation. 
+
+## Rule 6: Debugging
+
+- **Always use launch.json for debugging**: Configure the `launch.json` file to set up debugging for Java and browser launching.
+
+## Rule 7: Documentation
+
+- **Always document known issues and workarounds**: Document any known issues or workarounds related to Java SDKs, Mojo, or project management tools.
+
+## Rule 8: Max Package Structure
+
+- **Max Package**: The `max` package contains the following modules for project builds:
+
+  - **max-core**: Core utilities for Mojo projects.
+  - **mblack**: Mojo's black box for interoperability with Python and Java.
+    - **python**: Python runtime environment.
+    - **click**: Command-line interface utilities.
+    - **mypy_extensions**: Extensions for mypy type checking.
+    - **packaging**: Utilities for packaging Python projects.
+    - **pathspec**: Path specification utilities.
+    - **platformdirs**: Platform-specific directories.
+    - **typing_extensions**: Additional typing constructs.
+  - **max-python**: Python-specific utilities for Mojo projects.
+    - **numpy**: Numerical computing library.
+    - **sentencepiece**: Tokenization library.
+    - **tqdm**: Progress bar library.
+  - **mojo-jupyter**: Jupyter integration for Mojo.
+    - **jupyter_client**: Jupyter client for kernel communication.
+    - **tornado**: Web server for Jupyter notebooks. 
