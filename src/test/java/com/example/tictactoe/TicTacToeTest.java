@@ -1,6 +1,6 @@
 package com.example.tictactoe;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyChar;
 import static org.mockito.Mockito.*;
@@ -15,22 +15,31 @@ import lombok.extern.slf4j.Slf4j;
 @ExtendWith(MockitoExtension.class)
 class TicTacToeTest {
     private TicTacToe game;
+    private StandardTicTacToeBoard board;
 
     @BeforeEach
     void setUp() {
-        game = new TicTacToe();
+        board = new StandardTicTacToeBoard();
+        game = new TicTacToe(board);
         log.info("Game instance created for tests.");
     }
 
     @Test
     void testInitialState() {
-        assertEquals('X', game.getCurrentPlayer(), "Game should start with player X");
-        assertFalse(game.isGameOver(), "Game should not be over at start");
+        assertThat(game.getCurrentPlayer())
+            .as("Game should start with player X")
+            .isEqualTo('X');
+        
+        assertThat(game.isGameOver())
+            .as("Game should not be over at start")
+            .isFalse();
         
         // Check that all cells are empty
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                assertEquals(' ', game.getCell(i, j), "Cell should be empty at start");
+                assertThat(game.getCell(i, j))
+                    .as("Cell should be empty at start")
+                    .isEqualTo(' ');
             }
         }
     }
@@ -38,14 +47,20 @@ class TicTacToeTest {
     @Test
     void testWinCondition() {
         // Make winning moves for X (horizontal first row)
-        game.makeMove(0, 0);
+        boolean won = game.makeMove(0, 0);
         game.makeMove(1, 1); // O's move
         game.makeMove(0, 1);
         game.makeMove(1, 2); // O's move
-        boolean won = game.makeMove(0, 2);
+        won = game.makeMove(0, 2);
 
-        assertTrue(won, "Game should be won");
-        assertTrue(game.isGameOver(), "Game should be over");
+        assertThat(won)
+            .as("Game should be won")
+            .isTrue();
+        
+        assertThat(game.isGameOver())
+            .as("Game should be over")
+            .isTrue();
+        
         log.debug("testWinCondition passed with X winning.");
     }
 
@@ -53,12 +68,12 @@ class TicTacToeTest {
     void testInvalidMove() {
         game.makeMove(0, 0); // Valid first move
         
-        TicTacToeException exception = assertThrows(
-            TicTacToeException.class,
-            () -> game.makeMove(0, 0), // Try to play in the same spot
-            "Should throw exception for invalid move"
-        );
-        log.error("Expected exception caught: {}", exception.getMessage());
+        assertThatThrownBy(() -> game.makeMove(0, 0))
+            .as("Should throw exception for invalid move")
+            .isInstanceOf(TicTacToeException.class)
+            .hasMessageContaining("Invalid move");
+        
+        log.error("Invalid move test passed successfully.");
     }
 
     @Test
@@ -74,19 +89,48 @@ class TicTacToeTest {
         game.makeMove(2, 0); // O
         boolean result = game.makeMove(2, 2); // X
 
-        assertFalse(result, "Game should end in a draw");
-        assertTrue(game.isGameOver(), "Game should be over");
+        assertThat(result)
+            .as("Game should end in a draw")
+            .isFalse();
+        
+        assertThat(game.isGameOver())
+            .as("Game should be over")
+            .isTrue();
+        
         log.info("testDrawCondition confirms a draw state correctly.");
     }
 
     @Test
-    void testMockitoIntegration() {
-        TicTacToeBoard boardMock = mock(TicTacToeBoard.class);
-        when(boardMock.makeMove(anyInt(), anyInt(), anyChar())).thenReturn(true);
+    void testBoardStateCopy() {
+        // Verify board state copy is independent
+        game.makeMove(0, 0);
+        char[][] boardState = game.getBoard();
+        
+        // Modify the copy without affecting the game board
+        boardState[0][0] = 'Z';
+        
+        assertThat(game.getCell(0, 0))
+            .as("Original board should not be modified")
+            .isEqualTo('X');
+    }
 
-        // Verify that the mock works
-        assertTrue(boardMock.makeMove(0, 0, 'X'));
-        verify(boardMock, times(1)).makeMove(0, 0, 'X');
-        log.info("Mockito integration test passed.");
+    @Test
+    void testCustomBoardStrategy() {
+        // Create a mock BoardStrategy
+        BoardStrategy mockStrategy = mock(BoardStrategy.class);
+        when(mockStrategy.makeMove(anyInt(), anyInt(), anyChar())).thenReturn(true);
+        when(mockStrategy.checkWin(anyChar())).thenReturn(false);
+        when(mockStrategy.isFull()).thenReturn(false);
+
+        TicTacToe customGame = new TicTacToe(mockStrategy);
+        
+        boolean result = customGame.makeMove(0, 0);
+        
+        assertThat(result)
+            .as("Move should be accepted by mock strategy")
+            .isFalse();
+        
+        verify(mockStrategy, times(1))
+            .makeMove(0, 0, 'X');
     }
 }

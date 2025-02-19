@@ -12,7 +12,10 @@ dependencies {
     // JUnit 5
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
     
-    // Mockito for mocking
+    // AssertJ for more readable assertions
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    
+    // Mockito (minimal usage)
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
     
@@ -34,8 +37,12 @@ test {
         exceptionFormat "full"
         showStandardStreams = true
     }
-    // Enable parallel execution for tests and additional JVM properties
+    
+    // Parallel execution and JVM configuration
     systemProperty "junit.jupiter.execution.parallel.enabled", "true"
+    
+    // Disable dynamic agent loading
+    jvmArgs '-XX:+DisableDynamicAgentLoading'
 }
 
 application {
