@@ -20,8 +20,12 @@ public class TicTacToeException extends RuntimeException {
      * @param message A detailed description of the error that occurred during the game
      */
     public TicTacToeException(@NonNull String message) {
-        super(message);
-        this.errorMessage = message;
+        super(message, cause);
+        try {
+            errorMessage = message;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -32,6 +36,9 @@ public class TicTacToeException extends RuntimeException {
      */
     public TicTacToeException(@NonNull String message, Throwable cause) {
         super(message, cause);
-        this.errorMessage = message;
+        try {
+            errorMessage = message;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}

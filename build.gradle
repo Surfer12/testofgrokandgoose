@@ -101,8 +101,6 @@ jacocoTestCoverageVerification {
 // Lombok configuration
 lombok {
     version = '1.18.30'
-    
-    config['lombok.addLombokGeneratedAnnotation'] = 'true'
-    config['lombok.copyableAnnotations'] = ['org.junit.jupiter.api.Test']
+   
 }
-EOL 2>&1
+

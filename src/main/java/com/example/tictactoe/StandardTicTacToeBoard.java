@@ -1,9 +1,7 @@
 package com.example.tictactoe;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import lombok.NonNull;
 
 import java.util.Arrays;
 
@@ -13,7 +11,7 @@ import java.util.Arrays;
  */
 @Slf4j
 public class StandardTicTacToeBoard implements BoardStrategy {
-    @Getter @Setter
+    @Getter
     private static final int BOARD_SIZE = 3;
 
     @Getter
@@ -38,7 +36,7 @@ public class StandardTicTacToeBoard implements BoardStrategy {
     }
 
     @Override
-    public boolean makeMove(int row, int col, @NonNull char player) {
+    public boolean makeMove(int row, int col, char player) {
         validateMoveArguments(row, col);
         
         if (board[row][col] != ' ') {

@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 public class TicTacToe {
     // Final field for board strategy, enforcing immutability
     @NonNull
-    @Getter
     private final BoardStrategy board;
 
     // Additional game state fields
@@ -114,5 +113,9 @@ public class TicTacToe {
      */
     public char[][] getBoard() {
         return board.getBoardState();
+    }
+
+    public BoardStrategy getBoardStrategy() {
+        return board;
     }
 }
