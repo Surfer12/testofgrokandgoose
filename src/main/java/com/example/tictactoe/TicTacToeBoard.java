@@ -12,7 +12,7 @@ public class TicTacToeBoard {
         initializeBoard();
     }
 
-    private void initializeBoard() {
+    protected void initializeBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 board[i][j] = ' ';
@@ -54,22 +54,37 @@ public class TicTacToeBoard {
         // Check rows
         for (int i = 0; i < BOARD_SIZE; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+                log.info("Player {} wins by row {}", player, i);
                 return true;
             }
         }
         // Check columns
         for (int j = 0; j < BOARD_SIZE; j++) {
             if (board[0][j] == player && board[1][j] == player && board[2][j] == player) {
+                log.info("Player {} wins by column {}", player, j);
                 return true;
             }
         }
         // Check diagonals
         if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+            log.info("Player {} wins by main diagonal", player);
             return true;
         }
         if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+            log.info("Player {} wins by secondary diagonal", player);
             return true;
         }
         return false;
+    }
+
+    public void printBoard() {
+        StringBuilder boardState = new StringBuilder("\nCurrent Board State:\n");
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                boardState.append(board[i][j]).append(" ");
+            }
+            boardState.append("\n");
+        }
+        log.debug(boardState.toString());
     }
 } 

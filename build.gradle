@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'io.freefair.lombok' version '8.4'
+    id 'jacoco'
 }
 
 repositories {
@@ -19,7 +20,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
     
-    // Lombok for reducing boilerplate
+    // Lombok with explicit configuration
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
@@ -43,8 +44,53 @@ test {
     
     // Disable dynamic agent loading
     jvmArgs '-XX:+DisableDynamicAgentLoading'
+    finalizedBy jacocoTestReport
 }
 
 application {
     mainClass = 'com.example.tictactoe.TicTacToe'
 }
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70
+            }
+        }
+        
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['com.example.tictactoe.*']
+            
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDCOUNT'
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+// Lombok configuration
+lombok {
+    version = '1.18.28'
+    
+    // Optional: Configure Lombok's behavior
+    config['lombok.addLombokGeneratedAnnotation'] = 'true'
+    config['lombok.copyableAnnotations'] = ['org.junit.jupiter.api.Test']
+}
+EOL 2>&1

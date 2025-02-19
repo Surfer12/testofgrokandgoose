@@ -1,30 +1,28 @@
 package com.example.tictactoe;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Manages the game logic for a Tic Tac Toe game.
  * Uses dependency injection for the board strategy.
  */
+@Slf4j
+@RequiredArgsConstructor
 public class TicTacToe {
-    private static final Logger log = LoggerFactory.getLogger(TicTacToe.class);
-    
+    // Final field for board strategy, enforcing immutability
+    @NonNull
+    @Getter
     private final BoardStrategy board;
-    private char currentPlayer;
-    private boolean gameOver;
 
-    /**
-     * Constructs a new Tic Tac Toe game with a specific board strategy.
-     * 
-     * @param boardStrategy The board implementation to use for the game
-     */
-    public TicTacToe(BoardStrategy boardStrategy) {
-        this.board = boardStrategy;
-        this.currentPlayer = 'X';
-        this.gameOver = false;
-        log.info("New game started");
-    }
+    // Additional game state fields
+    @Getter
+    private char currentPlayer = 'X';
+
+    @Getter
+    private boolean gameOver = false;
 
     /**
      * Constructs a new Tic Tac Toe game with a standard board.
@@ -42,16 +40,38 @@ public class TicTacToe {
      * @throws TicTacToeException if the game is already over or the move is invalid
      */
     public boolean makeMove(int row, int col) {
-        if (gameOver) {
-            log.warn("Game is already over");
-            throw new TicTacToeException("Game is already over");
-        }
+        validateGameState();
 
-        if (!board.makeMove(row, col, currentPlayer)) {
+        boolean moveSuccessful = board.makeMove(row, col, currentPlayer);
+        
+        if (!moveSuccessful) {
             log.error("Invalid move: row={}, col={}", row, col);
             throw new TicTacToeException("Invalid move");
         }
 
+        return processMove(row, col);
+    }
+
+    /**
+     * Validates the current game state before making a move.
+     * 
+     * @throws TicTacToeException if the game is already over
+     */
+    private void validateGameState() {
+        if (gameOver) {
+            log.warn("Game is already over");
+            throw new TicTacToeException("Game is already over");
+        }
+    }
+
+    /**
+     * Processes the move after it has been validated.
+     * 
+     * @param row The row of the move
+     * @param col The column of the move
+     * @return true if the move results in a win, false otherwise
+     */
+    private boolean processMove(int row, int col) {
         if (board.checkWin(currentPlayer)) {
             gameOver = true;
             log.info("Player {} wins!", currentPlayer);
@@ -64,27 +84,16 @@ public class TicTacToe {
             return false;
         }
 
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-        log.debug("Next turn: Player {}", currentPlayer);
+        switchCurrentPlayer();
         return false;
     }
 
     /**
-     * Returns the current player ('X' or 'O').
-     * 
-     * @return The current player symbol
+     * Switches the current player after a valid move.
      */
-    public char getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    /**
-     * Checks if the game has ended (either by a win or a draw).
-     * 
-     * @return true if the game is over, false otherwise
-     */
-    public boolean isGameOver() {
-        return gameOver;
+    private void switchCurrentPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        log.debug("Next turn: Player {}", currentPlayer);
     }
 
     /**

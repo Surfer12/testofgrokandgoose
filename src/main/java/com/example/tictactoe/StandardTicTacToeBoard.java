@@ -1,15 +1,22 @@
 package com.example.tictactoe;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import lombok.NonNull;
+
+import java.util.Arrays;
 
 /**
  * Standard implementation of the Tic Tac Toe board strategy.
  * Manages board state, move validation, and win detection.
  */
+@Slf4j
 public class StandardTicTacToeBoard implements BoardStrategy {
-    private static final Logger log = LoggerFactory.getLogger(StandardTicTacToeBoard.class);
+    @Getter @Setter
     private static final int BOARD_SIZE = 3;
+
+    @Getter
     private char[][] board;
 
     /**
@@ -25,15 +32,13 @@ public class StandardTicTacToeBoard implements BoardStrategy {
      */
     private void initializeBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                board[i][j] = ' ';
-            }
+            Arrays.fill(board[i], ' ');
         }
         log.debug("Board initialized");
     }
 
     @Override
-    public boolean makeMove(int row, int col, char player) {
+    public boolean makeMove(int row, int col, @NonNull char player) {
         validateMoveArguments(row, col);
         
         if (board[row][col] != ' ') {

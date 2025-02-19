@@ -1,5 +1,7 @@
 package com.example.tictactoe;
 
+import lombok.NonNull;
+
 /**
  * Defines the contract for a Tic Tac Toe board implementation.
  * Allows for different board strategies and easier testing.
@@ -13,7 +15,7 @@ public interface BoardStrategy {
      * @param player The player's symbol ('X' or 'O')
      * @return true if the move is valid and successful, false otherwise
      */
-    boolean makeMove(int row, int col, char player);
+    boolean makeMove(int row, int col, @NonNull char player);
 
     /**
      * Retrieves the symbol at a specific board position.
