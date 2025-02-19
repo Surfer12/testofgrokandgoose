@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'io.freefair.lombok' version '8.4'
 }
 
 repositories {
@@ -13,10 +14,17 @@ dependencies {
     
     // Mockito for mocking
     testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
     
     // Lombok for reducing boilerplate
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+    
+    // SLF4J for logging
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'ch.qos.logback:logback-classic:1.4.11'
 }
 
 test {
@@ -24,6 +32,7 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
+        showStandardStreams = true
     }
     // Enable parallel execution for tests and additional JVM properties
     systemProperty "junit.jupiter.execution.parallel.enabled", "true"

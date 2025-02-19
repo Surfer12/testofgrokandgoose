@@ -17,7 +17,7 @@
             "webRoot": "${workspaceFolder}"
         },
         {
-            "type": "mojo",
+            "type": "node",
             "name": "Debug Mojo Code",
             "request": "launch",
             "program": "${workspaceFolder}/main.mojo",
